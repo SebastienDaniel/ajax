@@ -7,11 +7,11 @@ var ajax = (function() {
     var loader = document.createElement("div");
     loader.className = "ajax-loader";
 
-    function loaderStart(target) {
+    function startLoader(target) {
         target.appendChild(loader);
     }
 
-    function loaderStop(target) {
+    function stopLoader(target) {
         target.removeChild(loader);
     }
 
@@ -19,7 +19,7 @@ var ajax = (function() {
         var req = new XMLHttpRequest();
 
         if (c.loaderTarget && c.loaderTarget.nodeType === 1) {
-            loaderStart(c.loaderTarget);
+            startLoader(c.loaderTarget);
         }
 
         // start XMLHttpRequest
@@ -42,7 +42,7 @@ var ajax = (function() {
             if (req.readyState === 4) {
                 // loader needs to be removed BEFORE callbacks
                 if (c.loaderTarget && c.loaderTarget.nodeType === 1) {
-                    loaderStop(c.loaderTarget);
+                    stopLoader(c.loaderTarget);
                 }
                 if ((req.status === 200 /* get */ || req.status === 201 /* post */ || req.status === 204) /* delete */ && c.onSuccess !== null) {
                     c.onSuccess(getResponse(req, c), req.status);
