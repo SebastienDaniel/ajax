@@ -1,20 +1,43 @@
 /**
- * Created by Sebastien on 2015-02-19.
+ * @namespace ajax
+ * @summary module to make ajax requests
  */
-
 var ajax = (function() {
     "use strict";
+    /**
+     * @summary loader HTML element injected into loaderTarget when ajax is running
+     * @private
+     * @type {Element}
+     */
     var loader = document.createElement("div");
     loader.className = "ajax-loader";
 
+    /**
+     * @memberof ajax
+     * @summary injects the loader element into loaderTarget
+     * @private
+     * @param target {Element}
+     */
     function startLoader(target) {
         target.appendChild(loader);
     }
 
+    /**
+     * @memberof ajax
+     * @summary removes the loader from loaderTarget
+     * @private
+     * @param target {Element}
+     */
     function stopLoader(target) {
         target.removeChild(loader);
     }
 
+    /**
+     * @memberof ajax
+     * @summary executes the XMLHttpRequest
+     * @private
+     * @param c {object} request configuration hash
+     */
     function sendRequest(c) {
         var req = new XMLHttpRequest();
 
@@ -56,7 +79,13 @@ var ajax = (function() {
         req.send(c.data);
     }
 
-    // set request headers based on c.headers
+    /**
+     * @memberof ajax
+     * @summary sets basic headers for the request and sets the additional ones provided by the configuration
+     * @private
+     * @param req {object} XMLHttpRequest object
+     * @param headers {object} additional headers to be injected
+     */
     function setRequestHeaders(req, headers) {
         // set default values
         if (!headers["Content-Type"]) {
@@ -84,7 +113,14 @@ var ajax = (function() {
         }
     }
 
-    // parse response based on expected return type
+    /**
+     * @memberof ajax
+     * @summary parses the response data based on provided responseType
+     * @private
+     * @param req {object} XMLHttpRequest object
+     * @param c {object} configuration hash
+     * @returns the parsed data
+     */
     function getResponse(req, c) {
         var r = req.response;
 
@@ -95,6 +131,13 @@ var ajax = (function() {
         return r;
     }
 
+    /**
+     * @memberof ajax
+     * @private
+     * @summary verifies content provided by configuration object
+     * @param c {object} configuration hash
+     * @returns {boolean} result of validation (true|false)
+     */
     function validateConfig(c) {
         if (Object.prototype.toString.call(c.url) !== "[object String]") {
             throw new TypeError("ajax: requires a URL string");
@@ -118,9 +161,24 @@ var ajax = (function() {
             throw new TypeError("ajax: onFailure must be a function");
         }
 
+        if (c.responseType) {
+            if (!["json","text","arraybuffer","document","blob"].some(function(value) {
+                    return value === c.responseType;
+                })) {
+                throw new Error("ajax: responseType must have one of the following value:\njson\ntext\ndocument\nblob\narraybuffer");
+            }
+        }
+
         return true;
     }
 
+    /**
+     * @memberof ajax
+     * @private
+     * @summary builds the final request configuration object
+     * @param c {object} configuration hash
+     * @returns {{async: boolean, data: (*|null), setHeaders: (*|{}), method: *, onFailure: (*|null), onHeaders: (*|null), onSuccess: (*|null), responseType: (*|string), url: string, loaderTarget: (*|null)}}
+     */
     function finalizeConfig(c) {
         return {
             async: !!c.async,

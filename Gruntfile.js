@@ -104,13 +104,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-jscs");
-    grunt.loadNpmTasks("grunt-contrib-qunit");
-    grunt.loadNpmTasks("grunt-contrib-less");
-    grunt.loadNpmTasks("grunt-jsdoc");
-    grunt.loadNpmTasks("grunt-contrib-csslint");
-    grunt.loadNpmTasks("grunt-lesslint");
     
-    grunt.registerTask("dev", ["test", "less:dev", "copy:dev"]);
-    grunt.registerTask("prod", ["concat:prod", "cssmin:prod", "copy:prod"]);
-    grunt.registerTask("test", ["jshint", "jscs", "lesslint", "qunit"]);
+    grunt.registerTask("dev", ["test", "copy:dev"]);
+    grunt.registerTask("prod", ["concat:prod", "copy:prod"]);
+    grunt.registerTask("test", ["jshint", "jscs"]);
 };
