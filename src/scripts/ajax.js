@@ -147,6 +147,17 @@ var ajax = (function() {
             throw new TypeError("ajax: 'loaderTarget' is not an HTML element");
         }
 
+        if (Object.prototype.toString.call(c.method) === "[object String]") {
+            c.method = c.method.toUpperCase();
+            if (!["GET","POST","PUT","DELETE"].some(function(method) {
+                return method === c.method;
+            })) {
+                throw new TypeError("ajax: 'method' must have one of the following values:\nGET\nPOST\nPUT\nDelete");
+            }
+        } else {
+            throw Error("ajax: query 'method' is required");
+        }
+
         if (c.setHeaders && Object.prototype.toString.call(c.setHeaders) !== "[object Object]") {
             throw new TypeError("ajax: 'setHeaders' is not an object");
         }
@@ -194,31 +205,11 @@ var ajax = (function() {
         };
     }
 
-    // public API
-    return {
-        "get": function(c) {
-            if (validateConfig(c)) {
-                c.method = "GET";
-                sendRequest(finalizeConfig(c));
-            }
-        },
-        "post": function(c) {
-            if (validateConfig(c)) {
-                c.method = "POST";
-                sendRequest(finalizeConfig(c));
-            }
-        },
-        "put": function(c) {
-            if (validateConfig(c)) {
-                c.method = "PUT";
-                sendRequest(finalizeConfig(c));
-            }
-        },
-        "delete": function(c) {
-            if (validateConfig(c)) {
-                c.method = "DELETE";
-                sendRequest(finalizeConfig(c));
-            }
+    function query(c) {
+        if (validateConfig(c)) {
+            sendRequest(finalizeConfig(c));
         }
-    };
+    }
+
+    return query;
 }());
