@@ -30,43 +30,10 @@ module.exports = function(grunt) {
                 options: {
                     expand: true,
                     mangle: true,
-                    compress: true,
-                    screwIE8: true
-                },
-                src: "src/scripts/**/<%= pkg.name %>.js",
-                dest: "build/prod/assets/js/<%= pkg.name %>.min.js"
-            }
-        },
-        qunit: {
-            dev: {
-                src: ["test/**/*.html"]
-            }
-        },
-        less: {
-            dev: { // parse all LESS files into their CSS equivalents
-                files: [
-                    {
-                        expand: true,
-                        cwd: "src/styles",
-                        src: [ "**/*.less" ],
-                        dest: "build/dev/assets/css",
-                        ext: ".css"
-                    }
-                ]
-            },
-            prod: {
-                options: {
                     compress: true
                 },
-                files: [
-                    {
-                        expand: true,
-                        cwd: "src/styles",
-                        src: [ "**/*.less" ],
-                        dest: "build/prod/assets/css",
-                        ext: ".css"
-                    }
-                ]
+                src: "src/scripts/**/<%= pkg.name %>*.js",
+                dest: "build/prod/assets/js/<%= pkg.name %>.min.js"
             }
         },
         jsdoc: {
@@ -74,27 +41,6 @@ module.exports = function(grunt) {
             options: {
                 destination: "doc",
                 private: false
-            }
-        },
-        csslint: {
-            options: {
-                import: 2
-            },
-            src: ["build/dev/assets/css/**/*.css"]
-        },
-        lesslint: {
-            src: ["src/styles/**/*.less"],
-            options: {
-                csslint: {
-                    "adjoining-classes": false,
-                    "box-model": false,
-                    "unqualified-attributes": false,
-                    "unique-headings": false,
-                    "box-sizing": false,
-                    "outline-none": false,
-                    "font-sizes": false,
-                    "floats": false
-                }
             }
         }
     });
@@ -106,6 +52,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jscs");
     
     grunt.registerTask("dev", ["test", "copy:dev"]);
-    grunt.registerTask("prod", ["concat:prod", "copy:prod"]);
+    grunt.registerTask("prod", ["test", "uglify"]);
     grunt.registerTask("test", ["jshint", "jscs"]);
 };

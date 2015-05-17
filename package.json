@@ -1,5 +1,5 @@
 {
-  "name": "CommonDOMTasks",
+  "name": "ajax",
   "description": "utility functions for manipulating the DOM",
   "author": {
     "name": "Sebastien Daniel",

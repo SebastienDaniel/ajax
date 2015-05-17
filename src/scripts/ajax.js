@@ -48,7 +48,7 @@ var ajax = (function() {
         // start XMLHttpRequest
         req.open(c.method, c.url, c.async);
         setRequestHeaders(req, c.setHeaders);
-        
+
         // request now going through
         req.onreadystatechange = function() {
             // Headers & status are received
@@ -57,9 +57,6 @@ var ajax = (function() {
                     c.onHeaders(req.getAllResponseHeaders());
                 }
             }
-
-            // downloading data (partials are available)
-            //if (req.readyState === 3) {}
 
             // request is complete and successful
             if (req.readyState === 4) {
@@ -71,7 +68,7 @@ var ajax = (function() {
                 // process sucess or failure callbacks
                 if (req.status.toString().charAt(0) === "2" && c.onSuccess) {
                     c.onSuccess(getResponse(req, c), req.status);
-                } else if(c.onFailure) {
+                } else if (c.onFailure) {
                     c.onFailure(getResponse(req, c), req.status);
                 }
             }
@@ -105,7 +102,6 @@ var ajax = (function() {
         Object.keys(headers).forEach(function(header) {
             req.setRequestHeader(header, headers[header]);
         });
-
 
         // xhr2 spec
         if (req.responseType) {
@@ -188,7 +184,20 @@ var ajax = (function() {
      * @private
      * @summary builds the final request configuration object
      * @param c {object} configuration hash
-     * @returns {{async: boolean, data: (*|null), setHeaders: (*|{}), method: *, onFailure: (*|null), onHeaders: (*|null), onSuccess: (*|null), responseType: (*|string), url: string, loaderTarget: (*|null)}}
+     * @returns {
+     *  {
+     *   async: boolean,
+     *   data: (object|null),
+     *   setHeaders: (object|{}),
+     *   method: string,
+     *   onFailure: (function|null),
+     *   onHeaders: (function|null),
+     *   onSuccess: (function|null),
+     *   responseType: (string),
+     *   url: string,
+     *   loaderTarget: (Element|null)
+     *   }
+     *  }
      */
     function finalizeConfig(c) {
         return {
