@@ -161,10 +161,10 @@ var ajax = (function() {
         if (c.onFailure && Object.prototype.toString.call(c.onFailure) !== "[object Function]") {
             throw new TypeError("ajax: onFailure must be a function");
         }
-        if (c.onSuccess && Object.prototype.toString.call(c.onFailure) !== "[object Function]") {
+        if (c.onSuccess && Object.prototype.toString.call(c.onSuccess) !== "[object Function]") {
             throw new TypeError("ajax: onFailure must be a function");
         }
-        if (c.onHeaders && Object.prototype.toString.call(c.onFailure) !== "[object Function]") {
+        if (c.onHeaders && Object.prototype.toString.call(c.onHEaders) !== "[object Function]") {
             throw new TypeError("ajax: onFailure must be a function");
         }
 
