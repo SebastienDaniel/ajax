@@ -65,11 +65,19 @@ var ajax = (function() {
                     stopLoader(c.loaderTarget);
                 }
 
-                // process sucess or failure callbacks
+                // process success or failure callbacks
                 if (req.status.toString().charAt(0) === "2" && c.onSuccess) {
-                    c.onSuccess(getResponse(req, c), req.status);
+                    c.onSuccess({
+                        response: getResponse(req, c),
+                        status: req.status,
+                        headers: req.getAllResponseHeaders()
+                    });
                 } else if (c.onFailure) {
-                    c.onFailure(getResponse(req, c), req.status);
+                    c.onFailure({
+                        response: getResponse(req, c),
+                        status: req.status,
+                        headers: req.getAllResponseHeaders()
+                    });
                 }
             }
         };
