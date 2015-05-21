@@ -71,7 +71,7 @@ var ajax = (function() {
                         response: getResponse(req, c),
                         status: req.status,
                         getHeader: function(name) {
-                            req.getResponseHeader.call(req, name);
+                            return req.getResponseHeader.call(req, name);
                         }
                     });
                 } else if (c.onFailure) {
@@ -79,7 +79,7 @@ var ajax = (function() {
                         response: getResponse(req, c),
                         status: req.status,
                         getHeader: function(name) {
-                            req.getResponseHeader.call(req, name);
+                            return req.getResponseHeader.call(req, name);
                         }
                     });
                 }
