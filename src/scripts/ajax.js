@@ -70,13 +70,13 @@ var ajax = (function() {
                     c.onSuccess({
                         response: getResponse(req, c),
                         status: req.status,
-                        headers: req.getAllResponseHeaders()
+                        getHeader: req.getResponseHeader
                     });
                 } else if (c.onFailure) {
                     c.onFailure({
                         response: getResponse(req, c),
                         status: req.status,
-                        headers: req.getAllResponseHeaders()
+                        getHeader: req.getResponseHeader
                     });
                 }
             }
