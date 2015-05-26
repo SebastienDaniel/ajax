@@ -213,7 +213,7 @@ var ajax = (function() {
      */
     function finalizeConfig(c) {
         return {
-            async: !!c.async,
+            async: c.async !== false,
             data: c.data || null,
             setHeaders: c.setHeaders || {},
             method: c.method,
