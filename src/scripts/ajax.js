@@ -222,7 +222,7 @@ var ajax = (function() {
             onSuccess: c.onSuccess || null,
             responseType: c.responseType || "text",
             url: encodeURI(c.url).replace(/%5B/g, "[").replace(/%5D/g, "]"),
-            loaderTarget: c.loadTarget || null
+            loaderTarget: c.loaderTarget || null
         };
     }
 
