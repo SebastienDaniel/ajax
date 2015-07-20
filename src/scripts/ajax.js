@@ -148,6 +148,10 @@ var ajax = (function() {
             }
         }
 
+        if (c.data && Object.prototype.toString.call(c.data) !== "[object String]") {
+            throw new TypeError("ajax: data must be a string");
+        }
+
         return true;
     }
 
