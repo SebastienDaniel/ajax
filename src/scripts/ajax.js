@@ -4,33 +4,6 @@
  */
 var ajax = (function() {
     "use strict";
-    /**
-     * @summary loader HTML element injected into loaderTarget when ajax is running
-     * @private
-     * @type {Element}
-     */
-    var loader = document.createElement("div");
-    loader.className = "ajax-loader";
-
-    /**
-     * @memberof ajax
-     * @summary injects the loader element into loaderTarget
-     * @private
-     * @param target {Element}
-     */
-    function startLoader(target) {
-        target.appendChild(loader);
-    }
-
-    /**
-     * @memberof ajax
-     * @summary removes the loader from loaderTarget
-     * @private
-     * @param target {Element}
-     */
-    function stopLoader(target) {
-        target.removeChild(loader);
-    }
 
     /**
      * @memberof ajax
@@ -40,10 +13,6 @@ var ajax = (function() {
      */
     function sendRequest(c) {
         var req = new XMLHttpRequest();
-
-        if (c.loaderTarget) {
-            startLoader(c.loaderTarget);
-        }
 
         // start XMLHttpRequest
         req.open(c.method, c.url, c.async);
@@ -60,11 +29,6 @@ var ajax = (function() {
 
             // request is complete and successful
             if (req.readyState === 4) {
-                // loader needs to be removed BEFORE callbacks
-                if (c.loaderTarget) {
-                    stopLoader(c.loaderTarget);
-                }
-
                 // process success or failure callbacks
                 if (req.status.toString().charAt(0) === "2" && c.onSuccess) {
                     c.onSuccess({
@@ -151,10 +115,6 @@ var ajax = (function() {
             throw new TypeError("ajax: requires a URL string");
         }
 
-        if (c.loaderTarget && c.loaderTarget.nodeType !== 1) {
-            throw new TypeError("ajax: 'loaderTarget' is not an HTML element");
-        }
-
         if (Object.prototype.toString.call(c.method) === "[object String]") {
             c.method = c.method.toUpperCase();
             if (!["GET","POST","PUT","DELETE"].some(function(method) {
@@ -176,7 +136,7 @@ var ajax = (function() {
         if (c.onSuccess && Object.prototype.toString.call(c.onSuccess) !== "[object Function]") {
             throw new TypeError("ajax: onFailure must be a function");
         }
-        if (c.onHeaders && Object.prototype.toString.call(c.onHEaders) !== "[object Function]") {
+        if (c.onHeaders && Object.prototype.toString.call(c.onHeaders) !== "[object Function]") {
             throw new TypeError("ajax: onFailure must be a function");
         }
 
@@ -221,8 +181,7 @@ var ajax = (function() {
             onHeaders: c.onHeaders || null,
             onSuccess: c.onSuccess || null,
             responseType: c.responseType || "text",
-            url: encodeURI(c.url).replace(/%5B/g, "[").replace(/%5D/g, "]"),
-            loaderTarget: c.loaderTarget || null
+            url: encodeURI(c.url).replace(/%5B/g, "[").replace(/%5D/g, "]")
         };
     }
 
@@ -234,3 +193,10 @@ var ajax = (function() {
 
     return query;
 }());
+
+// adding commonJS exports if module.exports is part of the env. otherwise expose as a global module.
+if (typeof module !== undefined && typeof module.exports !== undefined) {
+    module.exports = ajax;
+} else {
+    window.ajax = ajax;
+}
