@@ -15,7 +15,7 @@ var ajax = (function() {
         var req = new XMLHttpRequest();
 
         // start XMLHttpRequest
-        req.open(c.method, c.url, c.async);
+        req.open(c.method, c.url, true);
         setRequestHeaders(req, c.setHeaders);
 
         // request now going through
@@ -106,13 +106,13 @@ var ajax = (function() {
     /**
      * @memberof ajax
      * @private
-     * @summary verifies content provided by configuration object
+     * @summary verifies content provided by configuration object, throws error on missing critical properties
      * @param c {object} configuration hash
      * @returns {boolean} result of validation (true|false)
      */
     function validateConfig(c) {
         if (Object.prototype.toString.call(c.url) !== "[object String]") {
-            throw new TypeError("ajax: requires a URL string");
+            throw Error("ajax: requires a URL string");
         }
 
         if (Object.prototype.toString.call(c.method) === "[object String]") {
@@ -134,10 +134,10 @@ var ajax = (function() {
             throw new TypeError("ajax: onFailure must be a function");
         }
         if (c.onSuccess && Object.prototype.toString.call(c.onSuccess) !== "[object Function]") {
-            throw new TypeError("ajax: onFailure must be a function");
+            throw new TypeError("ajax: onSuccess must be a function");
         }
         if (c.onHeaders && Object.prototype.toString.call(c.onHeaders) !== "[object Function]") {
-            throw new TypeError("ajax: onFailure must be a function");
+            throw new TypeError("ajax: onHeaders must be a function");
         }
 
         if (c.responseType) {
@@ -173,7 +173,6 @@ var ajax = (function() {
      */
     function finalizeConfig(c) {
         return {
-            async: c.async !== false,
             data: c.data || null,
             setHeaders: c.setHeaders || {},
             method: c.method,
