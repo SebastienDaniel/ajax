@@ -1,6 +1,6 @@
 /**
  * @namespace ajax
- * @summary module to make ajax requests
+ * @description module to make ajax requests
  */
 var ajax = (function() {
     "use strict";
@@ -32,7 +32,15 @@ var ajax = (function() {
                 // process success or failure callbacks
                 if (req.status.toString().charAt(0) === "2" && c.onSuccess) {
                     c.onSuccess({
-                        response: getResponse(req, c),
+                        response: parseResponse(req.response, c.responseType),
+                        status: req.status,
+                        getHeader: function(name) {
+                            return req.getResponseHeader.call(req, name);
+                        }
+                    });
+                } else if (req.status.toString() === "304" && c.onSuccess) {
+                    c.onSuccess({
+                        response: parseResponse(c.cacheData, c.responseType),
                         status: req.status,
                         getHeader: function(name) {
                             return req.getResponseHeader.call(req, name);
@@ -40,7 +48,7 @@ var ajax = (function() {
                     });
                 } else if (c.onFailure) {
                     c.onFailure({
-                        response: getResponse(req, c),
+                        response: parseResponse(req.response, c.responseType),
                         status: req.status,
                         getHeader: function(name) {
                             return req.getResponseHeader.call(req, name);
@@ -89,18 +97,19 @@ var ajax = (function() {
      * @memberof ajax
      * @summary parses the response data based on provided responseType
      * @private
-     * @param req {object} XMLHttpRequest object
-     * @param c {object} configuration hash
+     * @param response {Object} XMLHttpRequest response string
+     * @param type {String} expected response type (json|text|arraybuffer|xml)
      * @returns the parsed data
      */
-    function getResponse(req, c) {
-        var r = req.response;
-
-        if (c.responseType && c.responseType === "json" && r !== "") {
-            r = JSON.parse(r);
+    function parseResponse(response, type) {
+        var final = "";
+        if (response && response !== "") {
+            if (type === "json") {
+                final = JSON.parse(response);
+            }
         }
 
-        return r;
+        return final;
     }
 
     /**
@@ -188,9 +197,95 @@ var ajax = (function() {
         };
     }
 
+    /**
+     * @memberof ajax
+     * @private
+     * @summary determines how to handle the request based on communication with ajaxCache module
+     *
+     * @param c {Object} finalized ajax request object
+     */
+    function queryWithCache(c) {
+        switch (c.method) {
+            case "GET": {
+                var date;
+
+                // check if has passed repeat control
+                if (ajaxCache.canQuery(c.url, c.method, c.data)) {
+                    date = ajaxCache.getCacheDate(c.url, c.method);
+                    // we have a cached copy, send it to the AJAX request
+                    if (date) {
+                        c.setHeaders["If-Modified-Since"] = date;
+                        c.cacheData = ajaxCache.getCacheData(c.url);
+                    }
+                    // make the ajax request
+                    sendRequest(c);
+                } else {
+                    c.onFailure({
+                        response: "same GET request was made in too short an interval",
+                        status: "429"
+                    });
+                }
+                break;
+            }
+            case "POST": {
+                if (ajaxCache.canQuery(c.url, c.method, c.data)) {
+                    sendRequest(c);
+                } else {
+                    c.onFailure({
+                        response: "same POST was made in too short an interval",
+                        status: "429"
+                    });
+                }
+                break;
+            }
+            case "PUT": {
+                if (ajaxCache.canQuery(c.url, c.method, c.data)) {
+                    sendRequest(c);
+                } else {
+                    c.onFailure({
+                        response: "same PUT was made in too short an interval",
+                        status: "429"
+                    });
+                }
+                break;
+            }
+            case "DELETE": {
+                if (ajaxCache.canQuery(c.url, c.method)) {
+                    sendRequest(c);
+                } else {
+                    c.onFailure({
+                        response: "DELETE operation has already been processed for this URI",
+                        status: "429"
+                    });
+                }
+                break;
+            }
+            default: {
+                throw Error("somehow a bad request method made it here");
+            }
+        }
+    }
+    /**
+     * @memberof ajax
+     * @alias ajax
+     *
+     * @param c {Object} ajax query configuration object
+     * @param {string} c.url - URL to query
+     * @param {string} c.method - GET|POST|PUT|DELETE
+     * @param {string} c.data - data to send when making POST or PUT request
+     * @param {string} c.responseType - arraybuffer|json|text|xml expected data format of response
+     * @param {Function} c.onSuccess - callback on 20* http status codes
+     * @param {Function} c.onFailure - callback on 40* http status codes
+     * @param {Object} c.setHeaders - name:value pairing to add HTTP headers to request
+     */
     function query(c) {
         if (validateConfig(c)) {
-            sendRequest(finalizeConfig(c));
+            // make regular request
+            if (c.ignoreCache || !ajaxCache) {
+                sendRequest(finalizeConfig(c));
+            } else {
+                queryWithCache(finalizeConfig(c));
+            }
         }
     }
 
