@@ -102,7 +102,7 @@ var ajax = (function() {
      * @returns the parsed data
      */
     function parseResponse(response, type) {
-        var final = "";
+        var final = response;
         if (response && response !== "") {
             if (type === "json") {
                 final = JSON.parse(response);
