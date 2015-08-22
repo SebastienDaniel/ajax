@@ -1,7 +1,7 @@
 {
   "name": "sebastiendaniel-ajax",
   "description": "simple XMLHttpRequest abstraction",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "keywords": [
     "ajax",
     "XMLHttpRequest",
@@ -35,7 +35,6 @@
   "private": false,
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-contrib-jasmine": "^0.9.0",
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-contrib-uglify": "^0.8.0",
     "grunt-jscs": "^1.5.0",

@@ -30,6 +30,10 @@ ajax({
 that's all there is to it
 
 #Release notes
+- **2015-08-21** v1.1.0
+  - made ajaxCache a module of its own
+  - removed old img & style dependencies
+  - removed all ajaxCache dependencies
 - **2015-07-22** v1.0.1
   - removed support for sync requests (*all requests are now async*)
   - added ajaxCache module
