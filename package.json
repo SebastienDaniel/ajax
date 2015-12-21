@@ -1,7 +1,7 @@
 {
   "name": "sebastiendaniel-ajax",
   "description": "simple XMLHttpRequest abstraction",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "keywords": [
     "ajax",
     "XMLHttpRequest",

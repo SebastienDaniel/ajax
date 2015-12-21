@@ -46,7 +46,7 @@ var ajax = (function() {
                             return req.getResponseHeader.call(req, name);
                         }
                     });
-                } else if (c.onFailure) {
+                } else if (/4|5/.test(req.status.toString().charAt(0)) && c.onFailure) {
                     c.onFailure({
                         response: parseResponse(req.response, c.responseType),
                         status: req.status,
