@@ -20,12 +20,6 @@ module.exports = function(grunt) {
                 dest: "ajax.min.js"
             }
         },
-        jasmine: {
-            src: ["src/scripts/ajaxCache.js"],
-            options: {
-                specs: ["test/ajaxCache-cache-spec.js", "test/ajaxCache-getCacheDate-spec.js", "test/ajaxCache-getCacheData-spec.js", "test/ajaxCache-canQuery-spec.js"]
-            }
-        },
         jsdoc: {
             full: {
                 src: ['src/scripts/**.js'],
@@ -46,10 +40,9 @@ module.exports = function(grunt) {
     // Load the plugins
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks("grunt-jsdoc");
 
     grunt.registerTask("build", ["test", "uglify"]);
-    grunt.registerTask("test", ["jshint", "jscs", "jasmine"]);
+    grunt.registerTask("test", ["jshint", "jscs"]);
 };

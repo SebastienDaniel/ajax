@@ -46,7 +46,7 @@ var ajax = (function() {
                             return req.getResponseHeader.call(req, name);
                         }
                     });
-                } else if (c.onFailure) {
+                } else if (/4|5/.test(req.status.toString().charAt(0)) && c.onFailure) {
                     c.onFailure({
                         response: parseResponse(req.response, c.responseType),
                         status: req.status,
@@ -102,7 +102,7 @@ var ajax = (function() {
      * @returns the parsed data
      */
     function parseResponse(response, type) {
-        var final = "";
+        var final = response || "";
         if (response && response !== "") {
             if (type === "json") {
                 final = JSON.parse(response);
