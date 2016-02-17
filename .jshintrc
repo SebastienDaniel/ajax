@@ -15,13 +15,16 @@
   "node": true,
   "nonew": true,
   "undef": true,
-  //"unused": true,
+  "unused": true,
   "worker": true,
   "globals": {
-    "ajax": true,
-    "ERP": true,
-    "ct": true,
-    "_": true,
-    "Mustache": true
+    "Handlebars": true,
+    "GLOBALLOOP": true,
+    "alert": true,
+    "pwdChecker": true,
+    "require": true,
+    "module": true,
+    "describe": true,
+    "it": true
   }
 }

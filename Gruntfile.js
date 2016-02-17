@@ -9,15 +9,14 @@ module.exports = function(grunt) {
         jscs: {
             src: [ "src/scripts/**.js" ]
         },
-        uglify: {
-            prod: {
-                options: {
-                    expand: true,
-                    mangle: true,
-                    compress: true
-                },
-                src: "src/scripts/**.js",
-                dest: "ajax.min.js"
+        exec: {
+            test: {
+                cmd: "browserify src/scripts/index.js -s ajax > test/ajax.bundle.js"
+            }
+        },
+        mochaTest: {
+            test: {
+                src: ["test/unit/**/*.test.js"]
             }
         },
         jsdoc: {
@@ -34,7 +33,7 @@ module.exports = function(grunt) {
                     private: false
                 }
             }
-        },
+        }
     });
 
     // Load the plugins
@@ -42,6 +41,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks("grunt-jsdoc");
+    grunt.loadNpmTasks("grunt-exec");
+    grunt.loadNpmTasks("grunt-mocha-test");
 
     grunt.registerTask("build", ["test", "uglify"]);
     grunt.registerTask("test", ["jshint", "jscs"]);

@@ -1,5 +1,4 @@
 {
-    "disallowDanglingUnderscores": true,
     "disallowEmptyBlocks": true,
     "disallowKeywords": [
         "with",
@@ -13,7 +12,6 @@
     "disallowMixedSpacesAndTabs": "smart",
     "disallowMultipleLineBreaks": true,
     "disallowMultipleLineStrings": true,
-    "requireMultipleVarDecl": "onevar",
     "disallowSpaceAfterObjectKeys": true,
     "disallowSpaceAfterPrefixUnaryOperators": [
         "++",
@@ -30,7 +28,7 @@
     "disallowTrailingWhitespace": true,
     "disallowYodaConditions": true,
     "disallowPaddingNewlinesInBlocks": true,
-    "maximumLineLength": 200,
+    "maximumLineLength": 2000,
     "requireBlocksOnNewline": true,
     "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
     "requireCapitalizedConstructors": true,

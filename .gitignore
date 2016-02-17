@@ -140,7 +140,6 @@ csx
 AppPackages/
 
 # Others
-sql/
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
@@ -219,10 +218,9 @@ pip-log.txt
 ###########################
 node_modules/
 build/
-.idea/
-idea/
-doc/
-.idea
+old/
 .komodoproject
+.idea/
+material-design-icons-1.0.1/
 
 
