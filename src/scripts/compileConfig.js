@@ -38,14 +38,14 @@ function compileFinalConfig(c) {
         throw new TypeError("ajax request object expects property 'method' to one of:\n GET, POST, PUT, DELETE\n Provided:\n" + c.method);
     }
 
-    if (c.setHeaders) {
-        if (Object.prototype.toString.call(c.setHeaders) !== "[object Object]") {
-            throw new TypeError("ajax request object expects prop 'setHeaders' to be an object of key:value pairing for header:value\nProvided:\n" + c.setHeaders);
+    if (c.headers) {
+        if (Object.prototype.toString.call(c.headers) !== "[object Object]") {
+            throw new TypeError("ajax request object expects prop 'headers' to be an object of key:value pairing for header:value\nProvided:\n" + c.headers);
         } else {
-            o.setHeaders = c.setHeaders;
+            o.headers = c.headers;
         }
     } else {
-        o.setHeaders = {};
+        o.headers = {};
     }
 
     if (c.onFailure) {

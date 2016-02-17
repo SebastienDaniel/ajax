@@ -29,7 +29,7 @@ describe("compileConfig()", function() {
         expect(cconf.onHeaders).to.be.undefined;
 
         expect(cconf.data).to.eql("");
-        expect(cconf.setHeaders).to.exist;
+        expect(cconf.headers).to.exist;
         expect(Object.keys(cconf).length).to.eql(5);
     });
 
