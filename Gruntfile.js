@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         },
         exec: {
             test: {
-                cmd: "browserify src/scripts/index.js -s ajax > test/ajax.bundle.js"
+                cmd: "browserify src/scripts/ajax/index.js -s ajax > test/ajax.bundle.js"
             }
         },
         mochaTest: {
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         },
         jsdoc: {
             full: {
-                src: ['src/scripts/**.js'],
+                src: ['src/scripts/**/*.js'],
                 options: {
                     destination: 'doc/full-doc/'
                 }
@@ -38,12 +38,10 @@ module.exports = function(grunt) {
 
     // Load the plugins
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-mocha-test");
 
-    grunt.registerTask("build", ["test", "uglify"]);
-    grunt.registerTask("test", ["jshint", "jscs"]);
+    grunt.registerTask("test", ["jshint", "jscs", "exec:test", "mochaTest"]);
 };

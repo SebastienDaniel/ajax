@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = require("chai").expect,
-    compileConfig = require("../../src/scripts/compileConfig.js");
+    compileConfig = require("../../src/scripts/ajax/compileConfig.js");
 
 describe("compileConfig()", function() {
     var conf = {
