@@ -10,30 +10,24 @@ module.exports = function(req, c) {
         }
     }
 
-    // request is complete and successful
-    if (req.readyState === 4) {
-        try {
-            resp = parseResponse(req.response, c.responseType);
-        } catch (e) {
-            if (e instanceof SyntaxError) {
-                throw new SyntaxError("unable to parse response of type: " + c.responseType + " for\n" + req.response);
-            } else {
-                throw Error(e);
-            }
-        }
+    // readyState === 3
+    // content is downloading
 
+    // request is complete
+    if (req.readyState === 4) {
         // dispatch to callbacks
-        if (c.onSuccess && req.status.toString().charAt(0) === "2") {
-            // SUCCESS
-            c.onSuccess({
-                response: resp,
-                status: req.status,
-                getHeader: function(name) {
-                    return req.getResponseHeader.call(req, name);
+        if (c.onSuccess && /2|3/.test(req.status.toString().charAt(0))) {
+            try {
+                resp = parseResponse(req.response, c.responseType);
+            } catch (e) {
+                if (e instanceof SyntaxError) {
+                    throw new SyntaxError("unable to parse response of type: " + c.responseType + " for\n" + req.response);
+                } else {
+                    throw Error(e);
                 }
-            });
-        } else if (c.onSuccess && req.status.toString() === "304") {
-            // USE CACHE ???
+            }
+
+            // SUCCESS
             c.onSuccess({
                 response: resp,
                 status: req.status,
@@ -44,7 +38,7 @@ module.exports = function(req, c) {
         } else if (c.onFailure && /4|5/.test(req.status.toString().charAt(0))) {
             // FAILURE
             c.onFailure({
-                response: resp,
+                response: req.response,
                 status: req.status,
                 getHeader: function(name) {
                     return req.getResponseHeader.call(req, name);
