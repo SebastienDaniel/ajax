@@ -1,6 +1,6 @@
 /**
- * @memberof ajax
  * @private
+ *
  * @summary verifies content provided by configuration object, throws error on missing critical properties
  * @param c {object} configuration hash
  * @returns {object}

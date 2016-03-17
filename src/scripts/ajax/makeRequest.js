@@ -15,6 +15,7 @@ module.exports = function makeRequest(c) {
     req.open(c.method, c.url, true);
 
     // set request headers
+    // must be done after open()
     Object.keys(headers).forEach(function(h) {
         req.setRequestHeader(h, headers[h]);
     });
