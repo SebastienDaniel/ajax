@@ -4,9 +4,12 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
-            src:  [ "src/scripts/**.js" ]
+            src:  [ "src/scripts/**/*.js" ]
         },
         jscs: {
+            options: {
+                config: ".jscsrc"
+            },
             src: [ "src/scripts/**.js" ]
         },
         exec: {
