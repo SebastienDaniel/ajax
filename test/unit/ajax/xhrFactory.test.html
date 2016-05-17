@@ -24,14 +24,12 @@
                 method: "GET",
                 responseType: "xml",
                 timeout: 3000,
-                headers: {}
-            },
-            listeners = {
-                open: [],
-                headers: [],
-                success: [],
-                failure: [],
-                timeout: []
+                headers: {},
+                onOpen: [],
+                onHeaders: [],
+                onSuccess: [],
+                onFailure: [],
+                onTimeout: []
             };
 
             it("should return 'undefined' when config is invalid", function() {
@@ -39,11 +37,11 @@
             });
 
             it("should return a XMLHttpRequest instance", function() {
-                expect(xhrFactory(params, listeners)).to.be.instanceof(XMLHttpRequest);
+                expect(xhrFactory(params)).to.be.instanceof(XMLHttpRequest);
             });
 
             it("should set writable props, if provided", function() {
-                var x = xhrFactory(params, listeners);
+                var x = xhrFactory(params);
 
                 expect(x.timeout).to.eql(3000);
             });

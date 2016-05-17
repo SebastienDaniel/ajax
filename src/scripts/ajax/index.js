@@ -1,6 +1,7 @@
 "use strict";
 var xhrFactory = require("./xhrFactory"),
-    chainAddons = require("./chainAddons");
+    chainAddons = require("./chainAddons"),
+    finalizeParams = require("./finalizeParams");
 
 /**
  * Creates a AJAX instance, which is an env. for making async HTTP requests holding it's own
@@ -27,40 +28,16 @@ function createRequestFactory() {
 
             return this;
         },
+
         /**
          * @summary starts an async request, passing it through the addon queue, and finally opening it.
          * @param {object} params - configuration hash for the request
          * @returns {{on: on}}
          */
         req: function(params) {
-            var listeners = {
-                    headers: [],
-                    success: [],
-                    failure: [],
-                    timeout: []
-                };
-
-
             xhrFactory(
-                chainAddons(addons, params),
-                listeners
+                chainAddons(addons.concat(finalizeParams), params)
             );
-
-            return {
-                on: function (event, fn) {
-                    if (typeof event !== "string" || listeners[event] === undefined) {
-                        throw new Error("req.on() expects a valid string event name (headers, success, failure, timeout) as first argument. Provided:\n" + event + " (" + typeof event + ")");
-                    }
-
-                    if (typeof fn !== "function") {
-                        throw new TypeError("Request.on() expects a function as second argument. Provided:\n" + fn + " (" + typeof fn + ")");
-                    }
-
-                    listeners[event].push(fn);
-
-                    return this;
-                }
-            };
         }
     };
 }

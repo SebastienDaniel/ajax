@@ -1,45 +1,61 @@
 var parseResponse = require("./parseResponse");
 
 /**
- * @summary triggers existing listeners based on state of request.
- * @param req
- * @param {string} responseType - configuration object responseType, to account for XHRv2 not being supported (i.e. can't set xhr.responseType value)
- * @param {object} listeners - object of eventName:array of callbacks
+ * @summary triggers existing listeners based on state of XMLHttpRequest.
+ * @param xhr
+ * @param {object} c - configuration object
  */
-module.exports = function(req, responseType, listeners) {
+module.exports = function(xhr, c) {
     "use strict";
     var resp;
 
-    // Headers & status are received
-    if (req.readyState === 2) {
-        listeners.headers.forEach(function(cb) {
-            cb(req);
-        });
-    }
-
-    // request is complete
-    if (req.readyState === 4) {
-        // dispatch to callbacks
-        if (listeners.success && /2|3/.test(req.status.toString().charAt(0))) {
-            try {
-                resp = parseResponse(req.response, responseType);
-            } catch (e) {
-                if (e instanceof SyntaxError) {
-                    throw new SyntaxError("unable to parse response of type: " + responseType + " for\n" + req.response);
-                } else {
-                    throw Error(e);
-                }
+    switch (xhr.readyState) {
+        case 1: {
+            if (c.onOpen.length) {
+                c.onOpen.forEach(function (cb) {
+                    cb(xhr);
+                });
             }
+            break;
+        }
+        case 2: {
+            if (c.onHeaders.length) {
+                c.onHeaders.forEach(function (cb) {
+                    cb(xhr);
+                });
+            }
+            break;
+        }
+        case 3: {
+            break;
+        }
+        case 4: {
+            // dispatch to callbacks
+            if (c.onSuccess.length && /2|3/.test(xhr.status.toString().charAt(0))) {
+                try {
+                    resp = parseResponse(xhr.response, c.responseType);
+                } catch (e) {
+                    if (e instanceof SyntaxError) {
+                        throw new SyntaxError("unable to parse response of type: " + c.responseType + " for\n" + xhr.response);
+                    } else {
+                        throw Error(e);
+                    }
+                }
 
-            // SUCCESS
-            listeners.success.forEach(function(cb) {
-                cb(resp, req);
-            });
-        } else if (listeners.failure && /4|5/.test(req.status.toString().charAt(0))) {
-            // FAILURE
-            listeners.failure.forEach(function(cb) {
-                cb(req);
-            });
+                // SUCCESS
+                c.onSuccess.forEach(function(cb) {
+                    cb(resp, xhr);
+                });
+            } else if (c.onFailure.length && /4|5/.test(xhr.status.toString().charAt(0))) {
+                // FAILURE
+                c.onFailure.forEach(function(cb) {
+                    cb(xhr);
+                });
+            }
+            break;
+        }
+        default: {
+            break;
         }
     }
 };

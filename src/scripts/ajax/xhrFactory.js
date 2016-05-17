@@ -5,11 +5,10 @@ var responseListener = require("./responseListener");
  * @summary executes the XMLHttpRequest
  * @private
  * @param c {object} - request configuration hash
- * @param listeners {function[]} - callback functions for each event type  
  */
-module.exports = function xhr(c, listeners) {
+module.exports = function xhrFactory(c) {
     "use strict";
-    var req = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
 
     // early abort, if config invalid
     if (Object.prototype.toString.call(c) !== "[object Object]") {
@@ -17,30 +16,25 @@ module.exports = function xhr(c, listeners) {
     }
 
     // bind listeners
-    req.onreadystatechange = function() {
-        responseListener(req, c.responseType || "text", listeners);
+    xhr.onreadystatechange = function() {
+        responseListener(xhr, c);
     };
 
     // start XMLHttpRequest
-    req.open(c.method, c.url, true);
+    xhr.open(c.method, c.url, true);
 
     // set request headers
     // must be done after open()
     Object.keys(c.headers || {}).forEach(function(h) {
-        req.setRequestHeader(h, c.headers[h]);
+        xhr.setRequestHeader(h, c.headers[h]);
     });
 
     // handle timeout
     if (c.timeout) {
-        req.timeout = c.timeout;
-        req.ontimeout = function() {
-            listeners.timeout.forEach(function(cb) {
-                cb(req);
-            });
-        };
+        xhr.timeout = c.timeout;
     }
 
-    req.send(c.data);
+    xhr.send(c.data);
 
-    return req;
+    return xhr;
 };

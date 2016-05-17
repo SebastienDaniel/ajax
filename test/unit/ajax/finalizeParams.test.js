@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    validate = require("../../../src/scripts/addons/validateConfig");
+    validate = require("../../../src/scripts/ajax/finalizeParams");
 
 describe("addons.validateConfig()", function() {
     it("should flag invalid config object", function() {
@@ -28,21 +28,21 @@ describe("addons.validateConfig()", function() {
             return validate({
                 url: "somepath/"
             });
-        }).to.throw(TypeError);
+        }).to.throw(RangeError);
 
         expect(function() {
             return validate({
                 url: "somepath/",
                 method: null
             });
-        }).to.throw(TypeError);
+        }).to.throw(RangeError);
 
         expect(function() {
             return validate({
                 url: "somepath/",
                 method: "get"
             });
-        }).to.throw(RangeError);
+        }).to.not.throw;
 
         expect(function() {
             return validate({
