@@ -2,17 +2,17 @@
 <head>
     <meta charset="utf-8">
     <!-- encoding must be set for mocha's special characters to render properly -->
-    <link rel="stylesheet" href="../../tmp/mocha.css"/>
-    <script src="../../tmp/mocha.js"></script>
-    <script src="../../tmp/chai.js"></script>
-    <script src="../../tmp/sinon-chai.js"></script>
-    <script src="../../tmp/sinon.js"></script>
+    <link rel="stylesheet" href="../tmp/mocha.css"/>
+    <script src="../tmp/mocha.js"></script>
+    <script src="../tmp/chai.js"></script>
+    <script src="../tmp/sinon-chai.js"></script>
+    <script src="../tmp/sinon.js"></script>
     <script>
         mocha.ui('bdd');
         expect = chai.expect;
         chai.use(sinonChai);
     </script>
-    <script type="text/javascript" src="../../tmp/ajax.bundle.js"></script>
+    <script type="text/javascript" src="../tmp/ajax.bundle.js"></script>
 </head>
 <body>
     <div id="mocha"></div>
@@ -57,7 +57,7 @@
                     method: "GET",
                     onOpen: [onOpen],
                     onHeaders: [onHeaders],
-                    onSuccess: [done, onSuccess],
+                    onSuccess: [function() {done();}, onSuccess],
                     onFailure: [onFailure]
                 });
             });

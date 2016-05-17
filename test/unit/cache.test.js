@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = require("chai").expect,
-    cache = require("../../../src/scripts/addons/cache");
+    cache = require("../../src/scripts/addons/cache");
 
 describe("ajaxCache", function() {
     it("should store a GET request responding with '200'", function() {

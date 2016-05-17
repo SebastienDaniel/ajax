@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    cc = require("../../../src/scripts/addons/preConfig"),
+    cc = require("../../src/scripts/addons/preConfig"),
     base = {
         responseType: "text",
         method: "GET",

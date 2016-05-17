@@ -2,7 +2,7 @@ var chai = require("chai"),
     expect = require("chai").expect,
     sinon = require("sinon"),
     sinonChai = require("sinon-chai"),
-    responseListener = require("../../../src/scripts/ajax/responseListener.js");
+    responseListener = require("../../src/scripts/ajax/responseListener.js");
 
 chai.use(sinonChai);
 
