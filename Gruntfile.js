@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         mochaTest: {
             test: {
                 src: [
-                    "test/unit/ajax/**/*.test.js"
+                    "test/unit/**/*.test.js"
                 ]
             }
         },
