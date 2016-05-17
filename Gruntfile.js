@@ -1,26 +1,19 @@
 module.exports = function(grunt) {
-    // instructions for grunt
+    "use strict";
     
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
-            src:  [ "src/scripts/**/*.js" ]
+            options: {
+                jshintrc: true
+            },
+            src:  [ "src/scripts/ajax/**/*.js" ]
         },
         jscs: {
             options: {
                 config: ".jscsrc"
             },
             src: [ "src/scripts/**.js" ]
-        },
-        exec: {
-            test: {
-                cmd: "browserify src/scripts/ajax/index.js -s ajax > test/ajax.bundle.js"
-            }
-        },
-        mochaTest: {
-            test: {
-                src: ["test/unit/**/*.test.js"]
-            }
         },
         jsdoc: {
             full: {
@@ -36,6 +29,29 @@ module.exports = function(grunt) {
                     private: false
                 }
             }
+        },
+        exec: {
+            startMockServer: "json-server --watch test/tmp/db.json --ro &",
+            xhrFactory_test_bundle: "browserify src/scripts/ajax/xhrFactory.js -s xhrFactory > test/tmp/ajax.xhrFactory.bundle.js",
+            chainAddons_test_bundle: "browserify src/scripts/ajax/chainAddons.js -s chainAddons > test/tmp/ajax.chainAddons.bundle.js",
+            ajax_test_bundle: "browserify src/scripts/ajax/index.js -s ajax > test/tmp/ajax.bundle.js",
+            sinonChai: "browserify node_modules/sinon-chai -s sinonChai > test/tmp/sinon-chai.js"
+        },
+        mochaTest: {
+            test: {
+                src: [
+                    "test/unit/ajax/**/*.test.js"
+                ]
+            }
+        },
+        mocha_phantomjs: {
+            test: {
+                options: {
+                    phantomConfig: {
+                        "--local-to-remote-url-access": true
+                    }
+                },
+                src: ["test/unit/**/*.test.html"]}
         }
     });
 
@@ -45,6 +61,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-exec");
     grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.loadNpmTasks("grunt-mocha-phantomjs");
 
-    grunt.registerTask("test", ["jshint", "jscs", "exec:test", "mochaTest"]);
+    grunt.registerTask("test", ["jshint", "jscs", "exec", "mochaTest", "mocha_phantomjs"]);
 };
