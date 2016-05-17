@@ -26,9 +26,6 @@ module.exports = function(xhr, c) {
             }
             break;
         }
-        case 3: {
-            break;
-        }
         case 4: {
             // dispatch to callbacks
             if (c.onSuccess.length && /2|3/.test(xhr.status.toString().charAt(0))) {
@@ -44,7 +41,7 @@ module.exports = function(xhr, c) {
 
                 // SUCCESS
                 c.onSuccess.forEach(function(cb) {
-                    cb(resp, xhr);
+                    cb(xhr, resp);
                 });
             } else if (c.onFailure.length && /4|5/.test(xhr.status.toString().charAt(0))) {
                 // FAILURE
