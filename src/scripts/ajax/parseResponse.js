@@ -8,6 +8,7 @@
  * @returns {xml}
  */
 function parseXML(data) {
+    "use strict";
     var xml;
 
     // Support: IE9
@@ -28,20 +29,20 @@ function parseXML(data) {
  * @memberof ajax
  * @summary parses the response data based on provided responseType
  * @private
- * @param response {string} XMLHttpRequest response string
- * @param type {string} expected response type (json|text|arraybuffer|xml)
+ * @param xhr {object} XMLHttpRequest object
  * @returns {object|string}
  */
-module.exports = function parseResponse(response, type) {
-    if (typeof response === "string") {
-        if (response !== "") {
-            if (type === "json") {
-                return JSON.parse(response);
-            } else if (type === "text/xml" || type === "xml") {
-                return parseXML(response);
-            }
+module.exports = function parseResponse(xhr) {
+    "use strict";
+    
+    // only try to parse if not already parsed by xhr
+    if (typeof xhr.response === "string" && xhr.response !== "") {
+        if (xhr.responseType === "json") {
+            return JSON.parse(xhr.response);
+        } else if (xhr.type === "text/xml" || xhr.type === "xml") {
+            return parseXML(xhr.response);
         }
     }
 
-    return response;
+    return xhr.response;
 };

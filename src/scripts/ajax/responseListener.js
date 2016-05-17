@@ -1,48 +1,44 @@
 var parseResponse = require("./parseResponse");
 
-module.exports = function(req, c) {
+/**
+ * @summary triggers existing listeners based on state of request.
+ * @param req
+ * @param {string} responseType - configuration object responseType, to account for XHRv2 not being supported (i.e. can't set xhr.responseType value)
+ * @param {object} listeners - object of eventName:array of callbacks
+ */
+module.exports = function(req, responseType, listeners) {
+    "use strict";
     var resp;
 
     // Headers & status are received
     if (req.readyState === 2) {
-        if (c.onHeaders) {
-            c.onHeaders(req.getAllResponseHeaders());
-        }
+        listeners.headers.forEach(function(cb) {
+            cb(req);
+        });
     }
-
-    // readyState === 3
-    // content is downloading
 
     // request is complete
     if (req.readyState === 4) {
         // dispatch to callbacks
-        if (c.onSuccess && /2|3/.test(req.status.toString().charAt(0))) {
+        if (listeners.success && /2|3/.test(req.status.toString().charAt(0))) {
             try {
-                resp = parseResponse(req.response, c.responseType);
+                resp = parseResponse(req.response, responseType);
             } catch (e) {
                 if (e instanceof SyntaxError) {
-                    throw new SyntaxError("unable to parse response of type: " + c.responseType + " for\n" + req.response);
+                    throw new SyntaxError("unable to parse response of type: " + responseType + " for\n" + req.response);
                 } else {
                     throw Error(e);
                 }
             }
 
             // SUCCESS
-            c.onSuccess({
-                response: resp,
-                status: req.status,
-                getHeader: function(name) {
-                    return req.getResponseHeader.call(req, name);
-                }
+            listeners.success.forEach(function(cb) {
+                cb(resp, req);
             });
-        } else if (c.onFailure && /4|5/.test(req.status.toString().charAt(0))) {
+        } else if (listeners.failure && /4|5/.test(req.status.toString().charAt(0))) {
             // FAILURE
-            c.onFailure({
-                response: req.response,
-                status: req.status,
-                getHeader: function(name) {
-                    return req.getResponseHeader.call(req, name);
-                }
+            listeners.failure.forEach(function(cb) {
+                cb(req);
             });
         }
     }
