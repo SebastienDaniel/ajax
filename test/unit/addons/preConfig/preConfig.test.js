@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    cc = require("../../src/scripts/addons/preConfig"),
+    cc = require("../../../../src/scripts/addons/preConfig"),
     base = {
         responseType: "text",
         method: "GET",
@@ -11,9 +11,11 @@ var expect = require("chai").expect,
         timeout: 10000
     };
 
-describe("compileConfig()", function() {
+describe("preConfig()", function() {
+    "use strict";
+
     it("should return the base object values if no keys in extension object", function() {
-        var o = cc(base, {});
+        var o = cc(base)({});
 
         expect(o.responseType).to.eql(base.responseType);
         expect(o.method).to.eql(base.method);
@@ -22,7 +24,8 @@ describe("compileConfig()", function() {
     });
 
     it("should override base object values", function() {
-        var o = cc(base, {method: "PUT", timeout: 500});
+        var o = cc(base)({method: "PUT", timeout: 500});
+
         expect(o.method).to.eql("PUT");
         expect(o.responseType).to.eql("text");
         expect(o.timeout).to.eql(500);
@@ -31,18 +34,18 @@ describe("compileConfig()", function() {
     });
 
     it("should extend the base object url value", function() {
-        var o = cc(base, {url: "api/"});
+        var o = cc(base)({url: "api/"});
 
         expect(o.url).to.eql("api/");
 
-        o = cc(o, {url: "somePath"});
+        o = cc(o)({url: "somePath"});
         expect(o.url).to.eql("api/somePath");
     });
 
     it("should extend base object headers object", function() {
         var o;
 
-        o = cc(base, {method: "PUT", timeout: 500, headers: {"Accept-Charset": "utf-16"}});
+        o = cc(base)({method: "PUT", timeout: 500, headers: {"Accept-Charset": "utf-16"}});
         expect(o.method).to.eql("PUT");
         expect(o.responseType).to.eql("text");
         expect(o.timeout).to.eql(500);
@@ -56,7 +59,7 @@ describe("compileConfig()", function() {
     it("should replace base object header values when present in extending object", function() {
         var o;
 
-        o = cc(base, {method: "PUT", timeout: 500, headers: {"Some-Header": "Some-Value"}});
+        o = cc(base)({method: "PUT", timeout: 500, headers: {"Some-Header": "Some-Value"}});
         expect(o.method).to.eql("PUT");
         expect(o.responseType).to.eql("text");
         expect(o.timeout).to.eql(500);

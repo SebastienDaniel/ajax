@@ -1,48 +1,53 @@
-/**
- * should be instantiable, is a class, and compiles a pre-config object
- */
+var mergeStrings = require("./mergeStrings"),
+    mergeHeaders = require("./mergeHeaders"),
+    mergeCallbacks = require("./mergeCallbacks");
 
-var defaultConfig = {
-    responseType: "text",
-    method: "GET",
-    headers: {
-        "Accept-Charset": "utf-8",
-        "X-Requested-With": "XMLHttpRequest",
-        "Content-Type": "text/html"
-    },
-    timeout: 10000
-};
+function preConfig(base) {
+    "use strict";
 
-module.exports = function compileConfig(base, ext) {
-    base = base || defaultConfig;
-    
-    var o = {
-        url: base.url ? base.url + (ext.url || "") : (ext.url || ""), // extend existing url
-        method: ext.method || base.method, // overwrite
-        responseType: ext.responseType || base.responseType, // overwrite
-        timeout: ext.timeout || base.timeout, // overwrite
-        // copy headers
-        headers: base.headers ? Object.keys(base.headers).reduce(function(headers, key) {
-            headers[key] = base.headers[key];
+    if (!base) {
+        throw new TypeError("preConfig() expects an object argument. Provided\n" + base + " (" + typeof base + ")");
+    }
 
-            return headers;
-        }, {}) : {},
-        data: ext.data || ""
+    return function mergeConfigs(ext) {
+        if (ext && typeof ext === "object") {
+            // the base object has to remain unmodified
+            return Object.keys(base).reduce(function(ext, key) {
+                // handle extension cases, otherwise override
+                switch (key) {
+                    case "url":
+                    {
+                        ext[key] = mergeStrings(base[key], ext[key]);
+                        break;
+                    }
+                    case "headers":
+                    {
+                        ext[key] = mergeHeaders(base[key], ext[key]);
+                        break;
+                    }
+                    case "onOpen":
+                    case "onHeaders":
+                    case "onSuccess":
+                    case "onTimeout":
+                    case "onFailure":
+                    {
+                        ext[key] = mergeCallbacks(base[key], ext[key]);
+                        break;
+                    }
+                    default:
+                    {
+                        // override
+                        ext[key] = ext[key] || base[key];
+                        break;
+                    }
+                }
+
+                return ext;
+            }, ext);
+        } else {
+            return base;
+        }
     };
+}
 
-    // early abort
-    if (ext === undefined) {
-        return o;
-    }
-
-    // extend headers object, or create
-    if (ext.headers) {
-        o.headers = Object.keys(ext.headers).reduce(function(headers, key) {
-            headers[key] = ext.headers[key];
-
-            return headers;
-        }, o.headers)
-    }
-
-    return o;
-};
+module.exports = preConfig;
