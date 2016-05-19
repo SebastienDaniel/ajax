@@ -41,6 +41,6 @@
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
-    "sebastiendaniel-adt": "^1.0.1"
+    "sebastiendaniel-adt": "^2.0.0"
   }
 }

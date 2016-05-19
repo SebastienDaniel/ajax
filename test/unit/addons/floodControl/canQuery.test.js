@@ -13,10 +13,7 @@ describe("floodControl.canQuery()", function() {
                 get: function(key) {
                     return this[key];
                 },
-                add: function(key, value) {
-                    this[key] = value;
-                },
-                update: function(key, value) {
+                set: function(key, value) {
                     this[key] = value;
                 },
                 canQuery: cq
@@ -37,10 +34,7 @@ describe("floodControl.canQuery()", function() {
                 get: function(key) {
                     return this[key];
                 },
-                add: function(key, value) {
-                    this[key] = value;
-                },
-                update: function(key, value) {
+                set: function(key, value) {
                     this[key] = value;
                 },
                 canQuery: cq
@@ -60,10 +54,7 @@ describe("floodControl.canQuery()", function() {
                 get: function(key) {
                     return this[key];
                 },
-                add: function(key, value) {
-                    this[key] = value;
-                },
-                update: function(key, value) {
+                set: function(key, value) {
                     this[key] = value;
                 },
                 canQuery: cq

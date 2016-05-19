@@ -8,15 +8,10 @@ module.exports = function canQuery(key, delay) {
     "use strict";
     var val = this.get(key);
 
-    if (val) {
-        if (val >= Date.now() - delay) {
-            return false;
-        } else {
-            this.update(key, Date.now());
-            return true;
-        }
+    if (typeof val === "number" && val >= Date.now() - delay) {
+        return false;
     } else {
-        this.add(key, Date.now());
+        this.set(key, Date.now());
         return true;
     }
 };

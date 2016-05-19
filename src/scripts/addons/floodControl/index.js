@@ -15,6 +15,4 @@ function createFloodController(delays) {
     };
 }
 
-module.exports = {
-    createController: createFloodController
-};
+module.exports = createFloodController;
