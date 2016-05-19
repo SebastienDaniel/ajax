@@ -1,7 +1,19 @@
 # Getting started
+**mojax** is a modular AJAX utility. It's built to be extended via middleware, allowing you to customize your ajax tool to your needs.
 
--------------------------------
+1. add mojax as a dependency to your project:
+  `npm install mojax --save`
 
+2. require mojax in your code
+  `var mojax = require("mojax");`
+
+3. create the mojax instance you'll be using to make your HTTP requests
+  `var r = mojax.createRequester();`
+
+From there you can add middle, with the `use()` method, or make HTTP requests with the `req()` method.
+
+
+--------
 ## Modules
 
 <dl>
