@@ -1,7 +1,7 @@
 "use strict";
-var xhrFactory = require("./xhrFactory"),
-    chainAddons = require("./chainAddons"),
-    finalizeParams = require("./finalizeParams");
+var xhrFactory = require("./lib/xhrFactory"),
+    chainAddons = require("./lib/chainAddons"),
+    finalizeParams = require("./lib/finalizeParams");
 
 /**
  * Creates a AJAX instance, which is an env. for making async HTTP requests holding it's own
