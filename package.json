@@ -1,6 +1,6 @@
 {
-  "name": "sebastiendaniel-ajax",
-  "description": "extendable ajax request abstraction",
+  "name": "mojax",
+  "description": "extendable ajax request tool",
   "version": "2.0.0",
   "keywords": [
     "ajax",
@@ -16,11 +16,11 @@
     "url": "http://www.sebastiendaniel.ca/"
   },
   "bugs": {
-    "url": "https://www.github.com/SebastienDaniel/ajax/issues"
+    "url": "https://www.github.com/SebastienDaniel/mojax/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/SebastienDaniel/ajax.git"
+    "url": "https://www.github.com/SebastienDaniel/mojax.git"
   },
   "license": "MIT",
   "main": "src/scripts/ajax/index.js",
