@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    validate = require("../../src/scripts/ajax/finalizeParams");
+    validate = require("../../lib/finalizeParams");
 
 describe("addons.validateConfig()", function() {
     it("should flag invalid config object", function() {

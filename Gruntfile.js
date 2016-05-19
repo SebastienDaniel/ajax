@@ -1,29 +1,29 @@
 module.exports = function(grunt) {
     "use strict";
-    
+
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
             options: {
                 jshintrc: true
             },
-            src:  [ "src/scripts/ajax/**/*.js" ]
+            src:  [ "lib/**/*.js", "index.js" ]
         },
         jscs: {
             options: {
                 config: ".jscsrc"
             },
-            src: [ "src/scripts/**.js" ]
+            src: [ "lib/**/*.js", "index.js" ]
         },
         jsdoc: {
             full: {
-                src: ['src/scripts/**/*.js'],
+                src: ["lib/**/*.js", "index.js"],
                 options: {
                     destination: 'doc/full-doc/'
                 }
             },
             publicAPI: {
-                src: ['src/scripts/**.js'],
+                src: ["lib/**/*.js", "index.js"],
                 options: {
                     destination: 'doc/public-api/',
                     private: false
@@ -32,9 +32,9 @@ module.exports = function(grunt) {
         },
         exec: {
             startMockServer: "json-server --watch test/tmp/db.json --ro &",
-            xhrFactory_test_bundle: "browserify src/scripts/ajax/xhrFactory.js -s xhrFactory > test/tmp/ajax.xhrFactory.bundle.js",
-            chainAddons_test_bundle: "browserify src/scripts/ajax/chainAddons.js -s chainAddons > test/tmp/ajax.chainAddons.bundle.js",
-            ajax_test_bundle: "browserify src/scripts/ajax/index.js -s ajax > test/tmp/ajax.bundle.js",
+            xhrFactory_test_bundle: "browserify lib/xhrFactory.js -s xhrFactory > test/tmp/ajax.xhrFactory.bundle.js",
+            chainAddons_test_bundle: "browserify lib/chainAddons.js -s chainAddons > test/tmp/ajax.chainAddons.bundle.js",
+            ajax_test_bundle: "browserify index.js -s ajax > test/tmp/ajax.bundle.js",
             sinonChai: "browserify node_modules/sinon-chai -s sinonChai > test/tmp/sinon-chai.js"
         },
         mochaTest: {

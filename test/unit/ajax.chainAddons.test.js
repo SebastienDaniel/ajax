@@ -1,5 +1,5 @@
 var expect = require("chai").expect,
-    chainAddons = require("../../src/scripts/ajax/chainAddons");
+    chainAddons = require("../../lib/chainAddons");
 
 describe("chainAddons()", function() {
     var addon1 = function(config) {

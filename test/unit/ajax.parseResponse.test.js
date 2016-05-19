@@ -1,6 +1,6 @@
 var chai = require("chai"),
     expect = require("chai").expect,
-    parseResponse = require("../../src/scripts/ajax/parseResponse.js");
+    parseResponse = require("../../lib/parseResponse.js");
 
 describe("parseResponse()", function() {
     it("should return an object when provided a JSON response with JSON type", function() {
