@@ -6,7 +6,7 @@ var xhrFactory = require("./xhrFactory"),
 /**
  * Creates a AJAX instance, which is an env. for making async HTTP requests holding it's own
  * preset configuration and addons.
- * 
+ *
  * The instance is itself a xhr request factory, which returns an encapsulated XHR request object that has
  * a pub/sub interface that listens to the request's states
  */

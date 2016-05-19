@@ -63,16 +63,5 @@
         "mark": "\"",
         "escape": true
     },
-    "validateIndentation": 4,
-    "jsDoc": {
-        "checkAnnotations": "JSDoc3",
-        "checkParamExistence": true,
-        "checkParamNames": true,
-        "requireParamTypes": true,
-        "checkReturnTypes": true,
-        "checkTypes": "strictNativeCase",
-        "enforceExistence": {
-            "allExcept": ["exports", "paramless-procedures", "expressions"]
-        }
-    }
+    "validateIndentation": 4
 }
