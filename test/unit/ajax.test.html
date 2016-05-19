@@ -36,7 +36,7 @@
 
         describe("ajax()", function() {
             it("should return a request factory", function () {
-                var a = ajax.createRequestFactory();
+                var a = ajax.createRequester();
 
                 expect(a).to.be.instanceof(Object);
                 expect(Object.keys(a).length).to.eql(2);
@@ -45,7 +45,7 @@
         });
 
         describe("ajax().req()", function() {
-            var a = ajax.createRequestFactory(),
+            var a = ajax.createRequester(),
                 onOpen = sinon.spy(),
                 onHeaders = sinon.spy(),
                 onSuccess = sinon.spy(),
@@ -70,7 +70,7 @@
             });
 
             it("the request instance should allow adding listeners, even on aborted request", function() {
-                 var a = ajax.createRequestFactory(),
+                 var a = ajax.createRequester(),
                      onOpen = sinon.spy(),
                      onSuccess = sinon.spy(),
                      onFailure = sinon.spy(),

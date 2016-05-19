@@ -15,34 +15,14 @@ module.exports = function(grunt) {
             },
             src: [ "lib/**/*.js", "index.js" ]
         },
-        jsdoc: {
-            full: {
-                src: ["lib/**/*.js", "index.js"],
-                options: {
-                    destination: 'doc/full-doc/'
-                }
-            },
-            publicAPI: {
-                src: ["lib/**/*.js", "index.js"],
-                options: {
-                    destination: 'doc/public-api/',
-                    private: false
-                }
-            }
-        },
         exec: {
             startMockServer: "json-server --watch test/tmp/db.json --ro &",
             xhrFactory_test_bundle: "browserify lib/xhrFactory.js -s xhrFactory > test/tmp/ajax.xhrFactory.bundle.js",
             chainAddons_test_bundle: "browserify lib/chainAddons.js -s chainAddons > test/tmp/ajax.chainAddons.bundle.js",
             ajax_test_bundle: "browserify index.js -s ajax > test/tmp/ajax.bundle.js",
-            sinonChai: "browserify node_modules/sinon-chai -s sinonChai > test/tmp/sinon-chai.js"
-        },
-        mochaTest: {
-            test: {
-                src: [
-                    "test/unit/**/*.test.js"
-                ]
-            }
+            sinonChai: "browserify node_modules/sinon-chai -s sinonChai > test/tmp/sinon-chai.js",
+            buildDeveloperDocs: "jsdoc2md -t docTemplate.handlebars --private lib/**/*.js index.js > DEVELOPER_README.md",
+            buildPublicDocs: "jsdoc2md -t docTemplate.handlebars lib/**/*.js index.js > README.md"
         },
         mocha_phantomjs: {
             test: {
@@ -52,16 +32,21 @@ module.exports = function(grunt) {
                     }
                 },
                 src: ["test/unit/**/*.test.html"]}
+        },
+        mocha_istanbul: {
+            coverage: {
+                src: "test/unit/**/*.test.js"
+            }
         }
     });
 
     // Load the plugins
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-jscs");
-    grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks("grunt-mocha-test");
     grunt.loadNpmTasks("grunt-mocha-phantomjs");
+    grunt.loadNpmTasks("grunt-mocha-istanbul");
 
-    grunt.registerTask("test", ["jshint", "jscs", "exec", "mochaTest", "mocha_phantomjs"]);
+    grunt.registerTask("test", ["jshint", "jscs", "exec", "mocha_istanbul", "mocha_phantomjs"]);
+    grunt.registerTask("docs", ["exec:buildPublicDocs", "exec:buildDeveloperDocs"]);
 };

@@ -4,19 +4,28 @@ var xhrFactory = require("./lib/xhrFactory"),
     finalizeParams = require("./lib/finalizeParams");
 
 /**
- * Creates a AJAX instance, which is an env. for making async HTTP requests holding it's own
- * preset configuration and addons.
- *
- * The instance is itself a xhr request factory, which returns an encapsulated XHR request object that has
- * a pub/sub interface that listens to the request's states
+ * @typedef {object} requester
+ * @summary environment/interface used to add middleware and make HTTP requests
  */
-function createRequestFactory() {
-    var addons = [];
 
+
+/**
+ * @public
+ * @alias module:mojax.createRequester
+ * @summary creates a requester instance, which can be extended with middleware/addons,
+ * and from which HTTP requests can be dispatched
+ * @returns {requester}
+ */
+function createRequester() {
+    var addons = [];
+    
     return {
         /**
-         * Builds an addon queue, through which a request is passed.
-         * @param {function} fn - addon function to add to the ajax instance's addon queue
+         * @function
+         * @name requester#use
+         *
+         * @summary adds a middleware function to the requester pipeline
+         * @param {function} fn - middleware function to add to the requester's request pipeline
          * @returns {object} this
          */
         use: function(fn) {
@@ -30,18 +39,27 @@ function createRequestFactory() {
         },
 
         /**
-         * @summary starts an async request, passing it through the addon queue, and finally opening it.
-         * @param {object} params - configuration hash for the request
-         * @returns {{on: on}}
+         * @function
+         * @name requester#req
+         *
+         * @summary starts an async HTTP request, passing the configuration object through the middleware pipeline, and finally sending the request
+         * @param {params} params - configuration object used for the request
+         * @returns {object} this
          */
         req: function(params) {
             xhrFactory(
                 chainAddons(addons.concat(finalizeParams), params)
             );
+
+            return this;
         }
     };
 }
 
+/**
+ * mojax module
+ * @module mojax
+ */
 module.exports = {
-    createRequestFactory: createRequestFactory
+    createRequester: createRequester
 };

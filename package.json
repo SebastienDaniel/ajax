@@ -1,6 +1,6 @@
 {
   "name": "mojax",
-  "description": "extendable ajax request tool",
+  "description": "extendable ajax request module",
   "version": "2.0.0",
   "keywords": [
     "ajax",
@@ -23,19 +23,17 @@
     "url": "https://www.github.com/SebastienDaniel/mojax.git"
   },
   "license": "MIT",
-  "main": "src/scripts/ajax/index.js",
   "private": false,
   "devDependencies": {
-    "browserify": "^13.0.1",
     "chai": "^3.5.0",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-uglify": "^0.8.0",
     "grunt-exec": "^0.4.7",
     "grunt-jscs": "^1.5.0",
-    "grunt-jsdoc": "^0.6.7",
+    "grunt-mocha-istanbul": "^4.0.2",
     "grunt-mocha-phantomjs": "^3.0.0",
     "grunt-mocha-test": "^0.12.7",
+    "istanbul": "^0.4.3",
     "mocha": "^2.4.5",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0"
