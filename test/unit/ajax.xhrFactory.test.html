@@ -1,0 +1,55 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- encoding must be set for mocha's special characters to render properly -->
+    <link rel="stylesheet" href="../tmp/mocha.css"/>
+    <script src="../tmp/mocha.js"></script>
+    <script src="../tmp/chai.js"></script>
+    <script>
+        mocha.ui('bdd');
+        expect = chai.expect
+    </script>
+    <script type="text/javascript" src="../tmp/ajax.xhrFactory.bundle.js"></script>
+</head>
+<body>
+    <div id="mocha"></div>
+    <div id="testEl"></div>
+
+    <script>
+        var expect = chai.expect;
+
+        describe("xhrFactory()", function() {
+            var params = {
+                url: "",
+                method: "GET",
+                responseType: "xml",
+                timeout: 3000,
+                headers: {},
+                onOpen: [],
+                onHeaders: [],
+                onSuccess: [],
+                onFailure: [],
+                onTimeout: []
+            };
+
+            it("should return 'undefined' when config is invalid", function() {
+                expect(xhrFactory()).to.eql(undefined);
+            });
+
+            it("should return a XMLHttpRequest instance", function() {
+                expect(xhrFactory(params)).to.be.instanceof(XMLHttpRequest);
+            });
+
+            it("should set writable props, if provided", function() {
+                var x = xhrFactory(params);
+
+                expect(x.timeout).to.eql(3000);
+            });
+        });
+    </script>
+
+    <script>
+        mocha.run()
+    </script>
+</body>
+</html>

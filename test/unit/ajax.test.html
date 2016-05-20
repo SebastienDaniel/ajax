@@ -1,0 +1,103 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- encoding must be set for mocha's special characters to render properly -->
+    <link rel="stylesheet" href="../tmp/mocha.css"/>
+    <script src="../tmp/mocha.js"></script>
+    <script src="../tmp/chai.js"></script>
+    <script src="../tmp/sinon-chai.js"></script>
+    <script src="../tmp/sinon.js"></script>
+    <script>
+        mocha.ui('bdd');
+        expect = chai.expect;
+        chai.use(sinonChai);
+    </script>
+    <script type="text/javascript" src="../tmp/ajax.bundle.js"></script>
+</head>
+<body>
+    <div id="mocha"></div>
+    <div id="testEl"></div>
+
+    <script>
+        var expect = chai.expect;
+        var addon1 = function (config) {
+                config.name = "sebastien";
+                return config;
+            },
+            addon2 = function (config) {
+                config.name += config.name ? " Daniel" : "Daniel";
+                return config;
+            },
+            addon3 = function (config) {
+                return null;
+            },
+            addons = [addon1, addon2],
+            abortedAddons = [addon1, addon3, addon2];
+
+        describe("ajax()", function() {
+            it("should return a request factory", function () {
+                var a = ajax.createRequester();
+
+                expect(a).to.be.instanceof(Object);
+                expect(Object.keys(a).length).to.eql(2);
+                expect(Object.keys(a)).to.have.members(["use", "req"]);
+            });
+        });
+
+        describe("ajax().req()", function() {
+            var a = ajax.createRequester(),
+                onOpen = sinon.spy(),
+                onHeaders = sinon.spy(),
+                onSuccess = sinon.spy(),
+                onFailure = sinon.spy();
+
+            before(function(done) {
+                a.req({
+                    url: "http://localhost:3000/posts/1",
+                    method: "GET",
+                    onOpen: [onOpen],
+                    onHeaders: [onHeaders],
+                    onSuccess: [function() {done();}, onSuccess],
+                    onFailure: [onFailure]
+                });
+            });
+
+            it("the request instance should allow adding listeners", function() {
+                sinon.assert.called(onHeaders);
+                sinon.assert.called(onOpen);
+                sinon.assert.called(onSuccess);
+                sinon.assert.notCalled(onFailure);
+            });
+
+            it("the request instance should allow adding listeners, even on aborted request", function() {
+                 var a = ajax.createRequester(),
+                     onOpen = sinon.spy(),
+                     onSuccess = sinon.spy(),
+                     onFailure = sinon.spy(),
+                     onHeaders = sinon.spy();
+
+                 a.use(addon3);
+
+                 var r = a.req({
+                     url: "../../tmp/person.json",
+                     method: "GET",
+                     responseType: "json",
+                     onOpen: [onOpen],
+                     onHeaders: [onHeaders],
+                     onSuccess: [onSuccess],
+                     onFailure: [onFailure]
+                 });
+
+                 sinon.assert.notCalled(onHeaders);
+                 sinon.assert.notCalled(onOpen);
+                 sinon.assert.notCalled(onSuccess);
+                 sinon.assert.notCalled(onFailure);
+            });
+        });
+    </script>
+
+    <script>
+        mocha.run()
+    </script>
+</body>
+</html>

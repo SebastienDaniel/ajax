@@ -63,5 +63,5 @@
         "mark": "\"",
         "escape": true
     },
-   "validateIndentation": 4
+    "validateIndentation": 4
 }

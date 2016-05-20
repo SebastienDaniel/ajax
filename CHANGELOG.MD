@@ -1,4 +1,8 @@
 #Release notes
+- **2016-05-19** v2.0.0
+  - The mojax module can have multiple instances, each instance must be instantiated with `mojax.createRequester()`
+  - mojax can be extended with addons (middleware), allowing for easy extensions
+  - the underlying request object structure remains unchanged
 - **2016-02-17** v1.2.0
   - modularized code
   - added unit tests for separate modules

@@ -1,49 +1,52 @@
 module.exports = function(grunt) {
-    // instructions for grunt
-    
+    "use strict";
+
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
-            src:  [ "src/scripts/**.js" ]
+            options: {
+                jshintrc: true
+            },
+            src:  [ "lib/**/*.js", "index.js" ]
         },
         jscs: {
-            src: [ "src/scripts/**.js" ]
+            options: {
+                config: ".jscsrc"
+            },
+            src: [ "lib/**/*.js", "index.js" ]
         },
         exec: {
-            test: {
-                cmd: "browserify src/scripts/index.js -s ajax > test/ajax.bundle.js"
-            }
+            startMockServer: "json-server --watch test/tmp/db.json --ro &",
+            xhrFactory_test_bundle: "browserify lib/xhrFactory.js -s xhrFactory > test/tmp/ajax.xhrFactory.bundle.js",
+            chainAddons_test_bundle: "browserify lib/chainAddons.js -s chainAddons > test/tmp/ajax.chainAddons.bundle.js",
+            ajax_test_bundle: "browserify index.js -s ajax > test/tmp/ajax.bundle.js",
+            sinonChai: "browserify node_modules/sinon-chai -s sinonChai > test/tmp/sinon-chai.js",
+            buildDeveloperDocs: "jsdoc2md -t readme.hbs --private lib/**/*.js index.js > DEVELOPER_README.md",
+            buildPublicDocs: "jsdoc2md -t readme.hbs lib/**/*.js index.js > README.md"
         },
-        mochaTest: {
+        mocha_phantomjs: {
             test: {
-                src: ["test/unit/**/*.test.js"]
-            }
+                options: {
+                    phantomConfig: {
+                        "--local-to-remote-url-access": true
+                    }
+                },
+                src: ["test/unit/**/*.test.html"]}
         },
-        jsdoc: {
-            full: {
-                src: ['src/scripts/**.js'],
-                options: {
-                    destination: 'doc/full-doc/'
-                }
-            },
-            publicAPI: {
-                src: ['src/scripts/**.js'],
-                options: {
-                    destination: 'doc/public-api/',
-                    private: false
-                }
+        mocha_istanbul: {
+            coverage: {
+                src: "test/unit/**/*.test.js"
             }
         }
     });
 
     // Load the plugins
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-jscs");
-    grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-exec");
-    grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.loadNpmTasks("grunt-mocha-phantomjs");
+    grunt.loadNpmTasks("grunt-mocha-istanbul");
 
-    grunt.registerTask("build", ["test", "uglify"]);
-    grunt.registerTask("test", ["jshint", "jscs"]);
+    grunt.registerTask("test", ["jshint", "jscs", "exec", "mocha_istanbul", "mocha_phantomjs"]);
+    grunt.registerTask("docs", ["exec:buildPublicDocs", "exec:buildDeveloperDocs"]);
 };

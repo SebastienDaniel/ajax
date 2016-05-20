@@ -55,6 +55,25 @@ r.use(addTimeout);
 </dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#chainAddons">chainAddons(addons, params)</a> ⇒ <code>object</code> | <code>undefined</code> ℗</dt>
+<dd></dd>
+<dt><a href="#finalizeParams">finalizeParams(c)</a> ℗</dt>
+<dd></dd>
+<dt><a href="#mapCallbacks">mapCallbacks(v)</a> ⇒ <code>Array.&lt;function()&gt;</code> | <code>array</code> ℗</dt>
+<dd></dd>
+<dt><a href="#parseResponse">parseResponse(xhr)</a> ⇒ <code>object</code> | <code>string</code> ℗</dt>
+<dd></dd>
+<dt><a href="#parseXML">parseXML(data)</a> ⇒ <code>xml</code> ℗</dt>
+<dd></dd>
+<dt><a href="#responseListener">responseListener(xhr, c)</a> ℗</dt>
+<dd></dd>
+<dt><a href="#xhrFactory">xhrFactory(c)</a> ⇒ <code>object</code> | <code>undefined</code> ℗</dt>
+<dd></dd>
+</dl>
+
 ## Typedefs
 
 <dl>
@@ -74,6 +93,90 @@ mojax module
 **Summary**: creates a requester instance, which can be extended with middleware/addons,
 and from which HTTP requests can be dispatched  
 **Access:** public  
+<a name="chainAddons"></a>
+
+## chainAddons(addons, params) ⇒ <code>object</code> &#124; <code>undefined</code> ℗
+**Kind**: global function  
+**Summary**: simplified middleware pipe  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| addons | <code>Array.&lt;function()&gt;</code> | array of middleware used by the requester object |
+| params | <code>object</code> | configuration object of the request being made |
+
+<a name="finalizeParams"></a>
+
+## finalizeParams(c) ℗
+**Kind**: global function  
+**Summary**: enforces required properties of the request configuration object.  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| c | <code>object</code> | request configuration object |
+
+<a name="mapCallbacks"></a>
+
+## mapCallbacks(v) ⇒ <code>Array.&lt;function()&gt;</code> &#124; <code>array</code> ℗
+**Kind**: global function  
+**Summary**: Maps a function to an array containing the function, otherwise returns an empty array.  
+**Returns**: <code>Array.&lt;function()&gt;</code> &#124; <code>array</code> - - array of functions or empty array  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| v | <code>function</code> &#124; <code>Array.&lt;function()&gt;</code> &#124; <code>undefined</code> | initial value to map to an array |
+
+<a name="parseResponse"></a>
+
+## parseResponse(xhr) ⇒ <code>object</code> &#124; <code>string</code> ℗
+**Kind**: global function  
+**Summary**: parses the response data based on provided responseType  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| xhr | <code>object</code> | XMLHttpRequest object |
+
+<a name="parseXML"></a>
+
+## parseXML(data) ⇒ <code>xml</code> ℗
+**Kind**: global function  
+**Summary**: Parses XML string content  
+**Access:** private  
+**Author:** jQuery  
+**License**: https://github.com/jquery/jquery/blob/master/LICENSE.txt  
+**Copyright**: jQuery foundation  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>string</code> | content |
+
+<a name="responseListener"></a>
+
+## responseListener(xhr, c) ℗
+**Kind**: global function  
+**Summary**: triggers provided listeners based on state of XMLHttpRequest.  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| xhr | <code>object</code> | XMLHttpRequest instance of the request |
+| c | <code>object</code> | configuration object |
+
+<a name="xhrFactory"></a>
+
+## xhrFactory(c) ⇒ <code>object</code> &#124; <code>undefined</code> ℗
+**Kind**: global function  
+**Summary**: creates a XMLHttpRequest instance, builds it according to the provided params, executes the XMLHttpRequest  
+**Returns**: <code>object</code> &#124; <code>undefined</code> - XMLHttpRequest instance  
+**Access:** private  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| c | <code>object</code> | request configuration hash |
+
 <a name="requester"></a>
 
 ## requester : <code>object</code>
