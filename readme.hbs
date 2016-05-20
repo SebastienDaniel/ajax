@@ -10,10 +10,9 @@
 From there you can add middleware, with the `use()` method, or make HTTP requests with the `req()` method.
 
 ## How mojax uses middleware
-When you add middleware to a **requester** (`requester.use()`), the middleware function gets added to a queue.
-
 Middleware are used to manipulate the request parameters **before** the actual HTTP request is started.
 
+When you add middleware to a **requester** (`requester.use()`), the middleware function gets added to an internal queue.
 Every time you make a request, the request parameters you have provided are piped through each middleware.
 Each middleware **must return the request parameters object** for the next middleware to be called. Not returning the request parameters object
 (i.e. returning `null` or `undefined`) is how you can cancel a request.

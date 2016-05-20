@@ -43,15 +43,22 @@ function createRequester() {
          * @name requester#req
          *
          * @summary starts an async HTTP request, passing the configuration object through the middleware pipeline, and finally sending the request
-         * @param {params} params - configuration object used for the request
-         * @returns {object} this
+         * @param {object} params - configuration object used for the request
+         * @param {string} params.url - URL used as the HTTP request target
+         * @param {string} params.method - GET, POST, PUT, DELETE
+         * @param {string} [params.responseType=text] - json, text, xml, text/xml, text/html, arraybuffer, blob
+         * @param {object} [params.headers={X-Requested-With:XMLHttpRequest}] - request headers
+         * @param {string} [params.data] - data to send on POST or PUT request
+         * @param {function|function[]} [params.onSuccess] - callbacks triggered on successful request completion
+         * @param {function|function[]} [params.onFailure] - callbacks triggered on failed request completion
+         * @param {function|function[]} [params.onHeaders] - callbacks triggered when response headers are received from server
+         * @param {function|function[]} [params.onOpen] - callbacks triggered when request is opened
+         * @param {number} [params.timeout] - sets the timeout value of the underlying XMLHttpRequest object (if supported)
          */
         req: function(params) {
             xhrFactory(
                 chainAddons(addons.concat(finalizeParams), params)
             );
-
-            return this;
         }
     };
 }
